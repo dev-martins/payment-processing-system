@@ -1,0 +1,30 @@
+version: "3.5"
+services:
+  app-payment-system:
+    container_name: app-payment-system
+    build:
+      context: "."
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 83:80
+    restart: unless-stopped
+    tty: true
+    dns:
+      - 8.8.8.8
+
+    networks:
+      - payment-system
+  redis:
+    image: redis
+    command: redis-server --requirepass 1234
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PASSWORD=1234
+    networks:
+      - payment-system
+networks:
+  payment-system:
+    driver: bridge
