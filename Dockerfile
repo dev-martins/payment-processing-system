@@ -9,6 +9,7 @@ RUN apt-get upgrade -y && \
     libzip-dev \
     curl gnupg && \
     pecl install mcrypt-1.0.5 && \
+    docker-php-ext-install bcmath &&\
     docker-php-ext-enable mcrypt && \
     docker-php-ext-install zip && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
@@ -24,6 +25,10 @@ COPY apache.conf /etc/apache2/sites-enabled/000-default.conf
 WORKDIR /var/www/html
 
 RUN chmod  -R 777 storage/*
+
+# Instalando o Node.js e o npm
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
 
 RUN a2enmod rewrite headers ssl && \
 service apache2 restart
