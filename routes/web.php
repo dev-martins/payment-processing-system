@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('payment');
+});
+
+Route::prefix('payment')->group(function () {
+    Route::any('/', [PaymentController::class, 'index'])->name('payment');
+    Route::get('/agradecimento', [PaymentController::class, 'confirmation'])->name('confirmation');
+});
+
+Route::prefix('billing')->group(function () {
+    Route::get('/', function () {
+        return view('billing');
+    })->name('billingCreate');
 });

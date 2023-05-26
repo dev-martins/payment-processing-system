@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('payment')->group(function () {
+    Route::post('/simulate', [PaymentController::class, 'simulatePayment']);
+    Route::post('/create', [PaymentController::class, 'boletoPayment']);
+    Route::post('/create/billing', [PaymentController::class, 'createBillingPayment']);
+    Route::get('/pix', [PaymentController::class, 'getQrCode']);
+    Route::post('/pix', [PaymentController::class, 'pixPayment']);
+    Route::post('/credit/card', [PaymentController::class, 'cardPayment']);
+});
+
+Route::prefix('billing')->group(function () {
+    Route::post('/', [BillingController::class, 'createBilling']);
 });
